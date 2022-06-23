@@ -1,0 +1,66 @@
+.container {
+  border: 3px solid black;
+  border-radius: 10px;
+  margin: 10px 20px 10px 20px;
+  padding: 5px;
+}
+
+.frames-container {
+  display: flex;
+}
+
+.board-container {
+  width: 100%;
+}
+
+.keypad-message {
+  margin-top: 20px;
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.buttons-container {
+  margin: 5px auto;
+  background-color: lightyellow;
+  width: fit-content;
+  text-align: center;
+  border: 3px solid blue;
+  border-radius: 10px;
+}
+
+.info-container {
+  margin: 20px auto;
+  padding: 30px;
+  background-color: lightyellow;
+  width: 400px;
+  border: 3px solid blue;
+  border-radius: 10px;
+  font-size: x-large;
+}
+
+.game-over {
+  color: red;
+  padding-bottom: 10px;
+  text-align: center;
+  font-size: x-large;
+}
+
+.info {
+  padding-bottom: 10px;
+  color: blue;
+}
+
+.info-value {
+  color: red;
+}
+
+.btn-container {
+  width: 100%;
+  text-align: center;
+}
+
+.btn {
+  width: 140px;
+  font-size: large;
+  margin: 20px auto;
+}

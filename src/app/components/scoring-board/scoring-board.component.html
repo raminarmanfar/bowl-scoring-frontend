@@ -1,0 +1,39 @@
+<div>
+  <div class="container">
+    <div class="frames-container">
+    <span *ngFor="let frame of scoreService.allFrames" class="board-container">
+      <app-frame [frame]="frame"
+                 [isLastFrameVisible]="scoreService.isLastFrameBlockVisible"
+                 [currentFrameIndex]="scoreService.getCurrentFrameId()">
+      </app-frame>
+    </span>
+    </div>
+  </div>
+
+  <div>
+    <div class="keypad-message">Enter the number of pins knocked down</div>
+    <div class="buttons-container">
+      <app-key-pad [gameOver]="scoreService.isGameOver"
+                   [disableValueThreshold]="scoreService.getValueThreshold()"
+                   (btnClick)="scoreService.scoreFrame($event)">
+      </app-key-pad>
+    </div>
+  </div>
+
+  <div class="info-container">
+    <div class="game-over" *ngIf="scoreService.isGameOver">
+      <div class="game-over">GAVE OVER</div>
+      <div><span class="info">Score: </span>{{ scoreService.getFrameScoreByIndex(scoreService.LAST_FRAME_INDEX) }}</div>
+    </div>
+    <div *ngIf="!scoreService.isGameOver" class="info">
+      Current Frame ID: <span class="info-value">{{ scoreService.getCurrentFrameId() + 1 }}
+    </span>
+    </div>
+    <div *ngIf="!scoreService.isGameOver" class="info">
+      Current Round: <span class="info-value">{{ scoreService.getCurrentRound() }}</span>
+    </div>
+    <div class="btn-container">
+      <button class="btn" mat-raised-button [color]="'primary'" (click)="onResetClick()">NEW GAME</button>
+    </div>
+  </div>
+</div>
