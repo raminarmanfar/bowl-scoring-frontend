@@ -16,8 +16,8 @@ describe('FrameComponent', () => {
     fixture = TestBed.createComponent(FrameComponent);
     component = fixture.componentInstance;
     component.frame = {
-      frameIndex: 0,
-      isScored: true,
+      id: 0,
+      scored: true,
       firstRoundScore: 3,
       secondRoundScore: 6,
       thirdRoundScore: -1,

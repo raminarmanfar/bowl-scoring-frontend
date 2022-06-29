@@ -5,7 +5,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   template: `
     <span *ngFor="let number of numbers">
       <button mat-fab color="primary" [ngClass]="{'disabled-cursor': number > disableValueThreshold}"
-          [disabled]="gameOver || number > disableValueThreshold" class="button"
+          [disabled]="isLoading || gameOver || number > disableValueThreshold" class="button"
           (click)="btnClick.emit(number)">{{ number }}</button>
     </span>
   `,
@@ -14,6 +14,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class KeyPadComponent {
 
   @Input() gameOver = false;
+  @Input() isLoading = false;
   @Input() disableValueThreshold: number = 10;
   @Output() btnClick = new EventEmitter<number>();
 

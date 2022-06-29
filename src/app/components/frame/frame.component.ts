@@ -6,17 +6,17 @@ import {StepEnum} from '../../models/step.enum';
 @Component({
   selector: 'app-frame',
   template: `
-    <div class="container" [ngClass]="{selectedFrame: currentFrameIndex === frame.frameIndex}">
-      <div class="entry-no">{{ frame.frameIndex + 1 }}</div>
+    <div class="container" [ngClass]="{selectedFrame: currentFrameIndex === frame.id}">
+      <div class="entry-no">{{ frame.id + 1 }}</div>
 
       <div class="score-container">
         <div class="score-box">{{ getScoreValue(StepEnum.FIRST) }}</div>
         <div class="score-box score-box-right">{{ getScoreValue(StepEnum.SECOND) }}</div>
-        <div class="score-box score-box-right" *ngIf="frame.frameIndex === 9 && isLastFrameVisible">
+        <div class="score-box score-box-right" *ngIf="frame.id === 9 && isLastFrameVisible">
           {{ getScoreValue(StepEnum.THIRD) }}
         </div>
       </div>
-      <div class="frame-score">{{ frame.isScored ? frame.frameScore : '' }}</div>
+      <div class="frame-score">{{ frame.scored ? frame.frameScore : '' }}</div>
     </div>
   `,
   styleUrls: ['./frame.component.scss']
@@ -42,7 +42,7 @@ export class FrameComponent {
   }
 
   getScoreValue(blockStep: StepEnum): string {
-    if (this.frame.frameIndex === 9) {
+    if (this.frame.id === 9) {
       switch (blockStep) {
         case StepEnum.FIRST:
           return FrameComponent.getScore(this.frame.firstRoundScore);

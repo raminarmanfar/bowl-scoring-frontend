@@ -1,5 +1,5 @@
 export enum RoundStatusEnum {
-  STRIKE = 'X',
-  SPARE = '/',
-  NULL = ''
+  STRIKE = 'STRIKE',
+  SPARE = 'SPARE',
+  NULL = 'NULL'
 }

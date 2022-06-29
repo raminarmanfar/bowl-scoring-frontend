@@ -39,13 +39,13 @@ export class ScoreService {
     this.frames = [];
     for (let i = 0; i <= this.LAST_FRAME_INDEX; i++) {
       this.frames.push({
-        frameIndex: i,
+        id: i,
         roundStatus: RoundStatusEnum.NULL,
         firstRoundScore: -1,
         secondRoundScore: -1,
         thirdRoundScore: -1,
         frameScore: 0,
-        isScored: false
+        scored: false
       });
     }
   }
@@ -72,36 +72,36 @@ export class ScoreService {
 
   private strikesScoring(): void {
     this.frames.forEach(currentFrame => {
-      if (!currentFrame.isScored && currentFrame.roundStatus === RoundStatusEnum.STRIKE) {
-        const previousFrameScore = this.getFrameScoreByIndex(currentFrame.frameIndex - 1);
-        const nextFrame = this.getFrameByIndex(currentFrame.frameIndex + 1);
+      if (!currentFrame.scored && currentFrame.roundStatus === RoundStatusEnum.STRIKE) {
+        const previousFrameScore = this.getFrameScoreByIndex(currentFrame.id - 1);
+        const nextFrame = this.getFrameByIndex(currentFrame.id + 1);
         // last frame calculation has exceptional status after index 8
-        if (currentFrame.frameIndex === 8 && nextFrame && nextFrame.firstRoundScore > -1 && nextFrame.secondRoundScore > -1) {
-          currentFrame.isScored = true;
+        if (currentFrame.id === 8 && nextFrame && nextFrame.firstRoundScore > -1 && nextFrame.secondRoundScore > -1) {
+          currentFrame.scored = true;
           currentFrame.frameScore = this.MAX_SCORE + previousFrameScore + nextFrame.firstRoundScore + nextFrame.secondRoundScore;
         } else {
           currentFrame.frameScore = this.MAX_SCORE + previousFrameScore;
           if (nextFrame) {
             switch (nextFrame.roundStatus) {
               case RoundStatusEnum.STRIKE:
-                const secondNextFrame = this.getFrameByIndex(nextFrame.frameIndex + 1);
+                const secondNextFrame = this.getFrameByIndex(nextFrame.id + 1);
                 if (secondNextFrame) {
                   if (secondNextFrame.roundStatus === RoundStatusEnum.STRIKE) {
                     currentFrame.frameScore += 2 * this.MAX_SCORE;
-                    currentFrame.isScored = true;
+                    currentFrame.scored = true;
                   } else if (secondNextFrame.firstRoundScore > -1) {
                     currentFrame.frameScore += this.MAX_SCORE + secondNextFrame.firstRoundScore;
-                    currentFrame.isScored = true;
+                    currentFrame.scored = true;
                   }
                 }
                 break;
               case RoundStatusEnum.SPARE:
-                currentFrame.isScored = true;
+                currentFrame.scored = true;
                 currentFrame.frameScore += this.MAX_SCORE;
                 break;
               default:
                 if (nextFrame.firstRoundScore > -1 && nextFrame.secondRoundScore > -1) {
-                  currentFrame.isScored = true;
+                  currentFrame.scored = true;
                   currentFrame.frameScore = this.MAX_SCORE + nextFrame.firstRoundScore + nextFrame.secondRoundScore + previousFrameScore;
                 }
             }
@@ -137,8 +137,8 @@ export class ScoreService {
         this.strikesScoring();
         this.gameOver = currentFrame.roundStatus === RoundStatusEnum.NULL && score + currentFrame.firstRoundScore < this.MAX_SCORE;
         if (this.gameOver) {
-          currentFrame.isScored = true;
-          currentFrame.frameScore = score + currentFrame.firstRoundScore + this.getFrameScoreByIndex(currentFrame.frameIndex - 1);
+          currentFrame.scored = true;
+          currentFrame.frameScore = score + currentFrame.firstRoundScore + this.getFrameScoreByIndex(currentFrame.id - 1);
         }
         if (score === this.MAX_SCORE || score + currentFrame.firstRoundScore === this.MAX_SCORE) {
           this.lastFrameBlockVisible = true;
@@ -152,8 +152,8 @@ export class ScoreService {
       case StepEnum.THIRD:
         this.keypadValueThreshold = this.MAX_SCORE;
         currentFrame.thirdRoundScore = score;
-        currentFrame.isScored = true;
-        currentFrame.frameScore = this.getFrameScoreByIndex(currentFrame.frameIndex - 1) +
+        currentFrame.scored = true;
+        currentFrame.frameScore = this.getFrameScoreByIndex(currentFrame.id - 1) +
           currentFrame.firstRoundScore + currentFrame.secondRoundScore + currentFrame.thirdRoundScore;
         this.gameOver = true;
     }
@@ -170,9 +170,9 @@ export class ScoreService {
     const currentFrame = this.frames[this.currentFrameIndex];
     const previousFrame = this.getFrameByIndex(this.currentFrameIndex - 1);
 
-    if (previousFrame && !previousFrame.isScored && previousFrame.roundStatus === RoundStatusEnum.SPARE) {
-      previousFrame.isScored = true;
-      previousFrame.frameScore += this.MAX_SCORE + score + this.getFrameScoreByIndex(previousFrame.frameIndex - 1);
+    if (previousFrame && !previousFrame.scored && previousFrame.roundStatus === RoundStatusEnum.SPARE) {
+      previousFrame.scored = true;
+      previousFrame.frameScore += this.MAX_SCORE + score + this.getFrameScoreByIndex(previousFrame.id - 1);
     }
 
     if (this.currentFrameIndex === this.LAST_FRAME_INDEX) {
@@ -198,7 +198,7 @@ export class ScoreService {
             this.strikesScoring();
             currentFrame.frameScore = score + currentFrame.firstRoundScore +
               this.getFrameScoreByIndex(this.currentFrameIndex - 1);
-            currentFrame.isScored = true;
+            currentFrame.scored = true;
           }
           this.currentFrameIndex++;
           this.gameOver = this.currentFrameIndex === this.LAST_FRAME_INDEX + 1;
